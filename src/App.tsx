@@ -1,15 +1,16 @@
-import logo from './logo.svg';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
-function App() {
+import RoutesViews from '@/routes/Main';
+import { store, persistor } from '@/store/store';
+
+function App(): JSX.Element {
   return (
-    <div className="min-h-screen bg-slate-800">
-      <header className="container mx-auto max-w-screen-lg">
-        <div className="flex flex-col items-center justify-center">
-          <img src={logo} className="h-52 w-auto" alt="logo" />
-          <p className="text-xl text-white">Vite + React + TypeScript + Airbnb + Husky = 🔥</p>
-        </div>
-      </header>
-    </div>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <RoutesViews />
+      </PersistGate>
+    </Provider>
   );
 }
 
