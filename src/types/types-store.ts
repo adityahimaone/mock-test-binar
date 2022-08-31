@@ -17,14 +17,18 @@ export interface IRequestRegister {
 
 export interface IResponse {
   status: string;
-  result: {
-    access_token: string;
-  };
+  result: any;
   errors: Record<string, unknown>;
 }
 
-export interface InitialStateLogin {
+export interface IInitialStateAuth {
   loading: boolean;
-  data: any;
+  data: {
+    status: string;
+    result: {
+      access_token: string;
+    };
+    errors: Record<string, unknown>;
+  };
   error: string | null;
 }

@@ -1,8 +1,12 @@
 import { useFormik } from 'formik';
+import { useEffect } from 'react';
+import { toast, Toaster } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import InputText from '@/components/UI/Form/InputText';
+import { getAuthLogin } from '@/store/authSlice';
+import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { IRequestLogin } from '@/types/types-store';
 import { InitialValuesLogin } from '@/utils/InitialValues';
 
@@ -12,16 +16,33 @@ const schemaFormLogin = Yup.object().shape({
 });
 
 export default function Login(): JSX.Element {
+  const dispatch = useAppDispatch();
+
+  const { data: dataLogin, loading } = useAppSelector((state) => state.auth);
+
   const formikFormLogin = useFormik({
     initialValues: InitialValuesLogin,
     validationSchema: schemaFormLogin,
     onSubmit: (values: IRequestLogin) => {
-      console.log(values);
+      dispatch(getAuthLogin(values));
+      console.log(dataLogin, loading);
     },
   });
 
+  useEffect(() => {
+    if (loading === false) {
+      if (dataLogin?.status !== 'OK') {
+        toast.error('Login Gagal');
+      }
+      if (dataLogin?.status === 'OK') {
+        toast.success('Login berhasil');
+      }
+    }
+  }, [loading]);
+
   return (
     <div className="-mt-14 flex min-h-screen items-center justify-center">
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="w-full max-w-md">
         <div className="mb-3">
           <h1 className="text-center text-xl font-semibold">Login</h1>
@@ -42,10 +63,10 @@ export default function Login(): JSX.Element {
             type="password"
             label="Password"
             placeholder="******"
-            value={formikFormLogin.values.email}
+            value={formikFormLogin.values.password}
             onChange={formikFormLogin.handleChange}
-            touched={formikFormLogin.touched.email}
-            errors={formikFormLogin.errors.email}
+            touched={formikFormLogin.touched.password}
+            errors={formikFormLogin.errors.password}
           />
           <button type="submit" className="w-full rounded-md bg-indigo-800 py-2 text-white">
             Login

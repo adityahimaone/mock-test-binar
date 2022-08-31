@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import InputText from '@/components/UI/Form/InputText';
+import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { postRegister } from '@/store/registerSlice';
 import { IRequestRegister } from '@/types/types-store';
 import { InitialValuesRegister } from '@/utils/InitialValues';
 
@@ -16,11 +18,14 @@ const schemaFormRegister = Yup.object().shape({
 });
 
 function Register() {
+  const dispatch = useAppDispatch();
+
   const formikFormRegister = useFormik({
     initialValues: InitialValuesRegister,
     validationSchema: schemaFormRegister,
     onSubmit: (values: IRequestRegister) => {
       console.log(values);
+      dispatch(postRegister(values));
     },
   });
 
@@ -34,8 +39,8 @@ function Register() {
           <InputText
             name="name"
             type="text"
-            label="Name"
-            placeholder="Name"
+            label="Nama"
+            placeholder="Nama"
             value={formikFormRegister.values.name}
             onChange={formikFormRegister.handleChange}
             touched={formikFormRegister.touched.name}

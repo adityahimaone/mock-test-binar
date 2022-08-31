@@ -1,12 +1,11 @@
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
 
-import { IInitialState, IRequestLogin, IResponse, InitialStateLogin } from '@/types/types-store';
+import { IInitialState, IRequestLogin, IResponse, IInitialStateAuth } from '@/types/types-store';
 import requestNoAuth from '@/utils/helper/axios-noauth';
 
-const initialState: InitialStateLogin = {
+const initialState: IInitialStateAuth = {
   loading: false,
   data: {
     status: '',
@@ -42,3 +41,5 @@ export const authSlice = createSlice({
       });
   },
 });
+
+export default authSlice.reducer;
