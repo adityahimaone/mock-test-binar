@@ -1,17 +1,22 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 import Card from '@/components/UI/Card';
+import CardSkeleton from '@/components/UI/CardSkeleton';
 import ModalDelete from '@/components/UI/ModalDelete';
 import ModalEdit from '@/components/UI/ModalEdit';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { getDataProducts, saveDataProduct } from '@/store/productSlice';
+import { IProduct } from '@/types/types-main';
 
 function Home(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const skeletonData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
   const { data: dataLogin } = useAppSelector((state) => state.auth);
   const { data: dataProducts, loading: loadingProducts, saveData } = useAppSelector((state) => state.product);
@@ -19,7 +24,7 @@ function Home(): JSX.Element {
   const [modalEditIsOpen, setModalEditIsOpen] = useState(false);
   const [modalDeleteIsOpen, setModalDeleteIsOpen] = useState(false);
 
-  const onOpenModalEdit = (data: any) => {
+  const onOpenModalEdit = (data: IProduct) => {
     dispatch(saveDataProduct(data));
     setModalEditIsOpen(true);
   };
@@ -28,7 +33,7 @@ function Home(): JSX.Element {
     setModalEditIsOpen(false);
   };
 
-  const onOpenModalDelete = (data: any) => {
+  const onOpenModalDelete = (data: IProduct) => {
     dispatch(saveDataProduct(data));
     setModalDeleteIsOpen(true);
   };
@@ -59,9 +64,9 @@ function Home(): JSX.Element {
         <ModalDelete isOpen={modalDeleteIsOpen} onClose={onCloseModalDelete} data={saveData} />,
         portalDiv!,
       )}
-      <div>{loadingProducts ? <div>Loading...</div> : null}</div>
       <div className="my-5 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {dataProducts?.result?.map((product: any) => (
+        {loadingProducts ? skeletonData.map((item: number) => <CardSkeleton key={item} />) : null}
+        {dataProducts?.result?.map((product: IProduct) => (
           <Card
             data={product}
             onOpenModalEdit={onOpenModalEdit}

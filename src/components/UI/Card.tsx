@@ -1,17 +1,18 @@
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid';
-import { useState } from 'react';
 
 import notfoundimg from '@/assets/images/nopic.png';
+import { IProduct } from '@/types/types-main';
 import { convertNumberToDollar } from '@/utils/helper/helper';
 
 interface ICard {
   data: {
+    id: number;
     name: string;
     price: number;
     imageurl: string;
   };
-  onOpenModalEdit: (data: any) => void;
-  onOpenModalDelete: (data: any) => void;
+  onOpenModalEdit: (data: IProduct) => void;
+  onOpenModalDelete: (data: IProduct) => void;
 }
 
 function Card({ data, onOpenModalEdit, onOpenModalDelete }: ICard): JSX.Element {

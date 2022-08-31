@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
-import { IInitialState, IInitialStateAuth, IInitialStateProduct, IResponse } from '@/types/types-store';
+import { IInitialStateAuth, IInitialStateProduct, IResponse } from '@/types/types-store';
 import requestAuth from '@/utils/helper/axios-auth';
 
 const initialState: IInitialStateProduct = {

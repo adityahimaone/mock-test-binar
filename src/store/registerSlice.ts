@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
-import { IInitialState, IInitalStateRegister, IRequestRegister, IResponse } from '@/types/types-store';
+import { IInitalStateRegister, IRequestRegister, IResponse } from '@/types/types-store';
 import requestNoAuth from '@/utils/helper/axios-noauth';
 
 const initialState: IInitalStateRegister = {

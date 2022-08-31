@@ -16,8 +16,6 @@ function Navbar(): JSX.Element {
 
   const { data: dataLogin, loading } = useAppSelector((state) => state.auth);
 
-  console.log(dataLogin, 'access token nav');
-
   const [offcanvas, setOffcanvas] = useState<boolean>(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 

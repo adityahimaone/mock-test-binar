@@ -1,10 +1,18 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-shadow */
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import classNames from 'classnames';
+import { useState } from 'react';
 
 import { ITextInput } from '@/types/types-main';
 
 function InputText({ type, name, label, placeholder, maxLength, onChange, value, touched, errors }: ITextInput) {
+  const [showPasword, setShowPasword] = useState<boolean>(false);
+
+  const handleClickShowPassword = () => {
+    setShowPasword((prev) => !prev);
+  };
+
   const classText = classNames(
     'block w-full rounded-lg border p-2.5 text-sm text-gray-900 focus:border-blue-400 focus:ring-blue-500',
     {
@@ -12,13 +20,14 @@ function InputText({ type, name, label, placeholder, maxLength, onChange, value,
       'border-red-500 bg-red-50': touched && errors,
     },
   );
+
   return (
-    <div className="mb-3">
+    <div className="relative mb-3">
       <label htmlFor={`floating_input_${name}`} className="mb-2 block text-sm font-medium text-gray-900">
         {label}
       </label>
       <input
-        type={type}
+        type={!showPasword ? type : 'text'}
         name={name}
         id={`text_input_${name}`}
         onChange={onChange}
@@ -47,6 +56,17 @@ function InputText({ type, name, label, placeholder, maxLength, onChange, value,
             : undefined
         }
       />
+      <div>
+        {type === 'password' && (
+          <div className="absolute right-1 top-9 mt-1 mr-1">
+            {showPasword ? (
+              <EyeSlashIcon onClick={handleClickShowPassword} className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+            ) : (
+              <EyeIcon onClick={handleClickShowPassword} className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+            )}
+          </div>
+        )}
+      </div>
       {touched && errors ? <span className="text-xs text-red-500">{errors}</span> : null}
     </div>
   );
