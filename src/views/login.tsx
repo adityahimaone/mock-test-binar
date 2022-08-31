@@ -1,7 +1,8 @@
+import { Spinner } from 'flowbite-react';
 import { useFormik } from 'formik';
-import { useEffect } from 'react';
-import { toast, Toaster } from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
 import InputText from '@/components/UI/Form/InputText';
@@ -16,33 +17,38 @@ const schemaFormLogin = Yup.object().shape({
 });
 
 export default function Login(): JSX.Element {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [loginSubmit, setLoginSubmit] = useState<boolean>(false);
 
   const { data: dataLogin, loading } = useAppSelector((state) => state.auth);
 
   const formikFormLogin = useFormik({
     initialValues: InitialValuesLogin,
     validationSchema: schemaFormLogin,
-    onSubmit: (values: IRequestLogin) => {
-      dispatch(getAuthLogin(values));
-      console.log(dataLogin, loading);
+    onSubmit: async (values: IRequestLogin) => {
+      setLoginSubmit(true);
+      const succes = await dispatch(getAuthLogin(values));
+      if (succes) {
+        setLoginSubmit(false);
+      }
     },
   });
 
   useEffect(() => {
-    if (loading === false) {
-      if (dataLogin?.status !== 'OK') {
-        toast.error('Login Gagal');
-      }
-      if (dataLogin?.status === 'OK') {
+    if (loginSubmit) {
+      if (dataLogin.result !== null && dataLogin.result.access_token !== '') {
         toast.success('Login berhasil');
+        navigate('/');
+      }
+      if (dataLogin?.result === null) {
+        toast.error('Login Gagal: Email atau Password salah');
       }
     }
-  }, [loading]);
+  }, [dataLogin.result, loginSubmit]);
 
   return (
     <div className="-mt-14 flex min-h-screen items-center justify-center">
-      <Toaster position="top-center" reverseOrder={false} />
       <div className="w-full max-w-md">
         <div className="mb-3">
           <h1 className="text-center text-xl font-semibold">Login</h1>
@@ -69,7 +75,8 @@ export default function Login(): JSX.Element {
             errors={formikFormLogin.errors.password}
           />
           <button type="submit" className="w-full rounded-md bg-indigo-800 py-2 text-white">
-            Login
+            <span className="mr-2">Login</span>
+            {loading ? <Spinner color="info" aria-label="Info spinner example" /> : null}
           </button>
           <div>
             <span className="text-xs text-gray-500">

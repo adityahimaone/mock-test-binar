@@ -16,3 +16,18 @@ export interface IFormRegister {
   password: string;
   passwordConfirmation: string;
 }
+export interface IModalExtends {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export interface IProduct {
+  id: number;
+  name: string;
+  price: number;
+  imageurl: string;
+}
+
+export interface IModalEditExtends extends IModalExtends {
+  data: IProduct;
+}

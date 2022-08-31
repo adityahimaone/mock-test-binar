@@ -1,9 +1,10 @@
 import axios, { Method, AxiosResponse } from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL;
+const MOCK_API_URL = import.meta.env.VITE_MOCK_API_URL;
 
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: MOCK_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },

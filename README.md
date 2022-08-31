@@ -1,4 +1,4 @@
-# Boiler Plate
+# Mock Test Binar
 
 Vite + React + TypeScript + TailwindCSS + ESLint + Prettier + Husky + Lint-Staged
 
@@ -9,20 +9,6 @@ Vite + React + TypeScript + TailwindCSS + ESLint + Prettier + Husky + Lint-Stage
 - 💅 Pre-configured and extensible Prettier configuration
 - 🔬 Git hooks for code formatting and linting pre-commit
 
-## Usage
-
-```bash
-npx degit adityahimaone/vite-react-ts-template my-app
-
-cd my-app
-
-# Required if you want a repository and work with Git hooks
-git init
-
-yarn install
-
-yarn dev
-```
 
 ## Available commands
 

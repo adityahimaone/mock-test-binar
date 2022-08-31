@@ -1,14 +1,27 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { Bars3BottomRightIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { Bars3BottomRightIcon, XMarkIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { Link } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import { Link, useMatch, useNavigate } from 'react-router-dom';
+
+import { onLogout } from '@/store/authSlice';
+import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
 import ModalCreate from './ModalCreate';
 
 function Navbar(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const { data: dataLogin, loading } = useAppSelector((state) => state.auth);
+
+  console.log(dataLogin, 'access token nav');
+
   const [offcanvas, setOffcanvas] = useState<boolean>(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const matchHome = useMatch('/');
 
   const onOpenModal = () => {
     setModalIsOpen(true);
@@ -31,9 +44,18 @@ function Navbar(): JSX.Element {
                 PL
               </div>
               <span className="font-medium text-white">Product List</span>
-              <button type="button" onClick={onOpenModal} className="ml-2 text-white">
-                Create New
-              </button>
+              {matchHome ? (
+                <button
+                  type="button"
+                  onClick={onOpenModal}
+                  className="ml-3 rounded-md bg-white p-2 font-medium text-black"
+                >
+                  <span className="hidden md:block">Create New</span>
+                  <span className="block md:hidden">
+                    <PlusIcon className="h-4 w-4" />
+                  </span>
+                </button>
+              ) : null}
             </div>
             <div className="flex w-4/12 justify-end md:hidden">
               <button type="button" onClick={() => setOffcanvas(!offcanvas)}>
@@ -54,7 +76,22 @@ function Navbar(): JSX.Element {
               </button>
               <ul className="flex flex-col space-y-4 md:flex-row md:items-center md:space-x-14 md:space-y-0">
                 <li className="font-semibold text-white hover:text-yellow-600">
-                  <Link to="/login">Login</Link>
+                  {dataLogin.result !== null && dataLogin.result.access_token !== '' ? (
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        const success = await dispatch(onLogout());
+                        if (success) {
+                          toast.success('Logout Success');
+                          navigate('/login');
+                        }
+                      }}
+                    >
+                      Logout
+                    </button>
+                  ) : (
+                    <Link to="/login">Login</Link>
+                  )}
                 </li>
               </ul>
             </div>

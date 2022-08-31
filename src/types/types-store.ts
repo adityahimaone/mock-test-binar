@@ -4,6 +4,20 @@ export interface IInitialState {
   error: string | null;
 }
 
+export interface IInitalStateRegister {
+  loading: boolean;
+  data: {
+    status: string;
+    result: any;
+    errors: any;
+  };
+  error: string | null;
+}
+
+export interface IInitialStateProduct extends IInitialState {
+  saveData: any;
+}
+
 export interface IRequestLogin {
   email: string;
   password: string;
@@ -27,7 +41,7 @@ export interface IInitialStateAuth {
     status: string;
     result: {
       access_token: string;
-    };
+    } | null;
     errors: Record<string, unknown>;
   };
   error: string | null;

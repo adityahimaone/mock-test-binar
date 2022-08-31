@@ -8,6 +8,7 @@ import thunk, { ThunkDispatch } from 'redux-thunk';
 
 import authSlice from './authSlice';
 import productSlice from './productSlice';
+import registerSlice from './registerSlice';
 
 const logger = createLogger();
 
@@ -16,7 +17,7 @@ const persistConfig = {
   storage,
 };
 
-const reducers = combineReducers({ auth: authSlice, product: productSlice });
+const reducers = combineReducers({ auth: authSlice, product: productSlice, register: registerSlice });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
 

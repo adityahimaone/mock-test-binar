@@ -2,16 +2,14 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
-import { IInitialState, IRequestLogin, IResponse, IInitialStateAuth } from '@/types/types-store';
+import { IRequestLogin, IResponse, IInitialStateAuth } from '@/types/types-store';
 import requestNoAuth from '@/utils/helper/axios-noauth';
 
 const initialState: IInitialStateAuth = {
   loading: false,
   data: {
     status: '',
-    result: {
-      access_token: '',
-    },
+    result: null,
     errors: {},
   },
   error: null,
@@ -25,7 +23,11 @@ export const getAuthLogin = createAsyncThunk('auth/login', async (data: IRequest
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    onLogout: (state) => {
+      state.data = initialState.data;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(getAuthLogin.pending, (state) => {
@@ -42,4 +44,5 @@ export const authSlice = createSlice({
   },
 });
 
+export const { onLogout } = authSlice.actions;
 export default authSlice.reducer;

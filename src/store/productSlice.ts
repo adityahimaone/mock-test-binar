@@ -1,47 +1,70 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
-import { IInitialState, IInitialStateAuth, IResponse } from '@/types/types-store';
+import { IInitialState, IInitialStateAuth, IInitialStateProduct, IResponse } from '@/types/types-store';
 import requestAuth from '@/utils/helper/axios-auth';
 
-const initialState: IInitialState = {
+const initialState: IInitialStateProduct = {
   loading: false,
   data: {
     status: '',
     result: {},
     errors: {},
   },
+  saveData: {},
   error: null,
 };
 
 export const getDataProducts = createAsyncThunk('product/getDataProducts', async (id, { getState }) => {
   const { auth } = getState() as { auth: IInitialStateAuth };
-  const response = await requestAuth('get', '/v1/products', auth.data.result.access_token);
+  const response = await requestAuth(
+    'get',
+    '/products',
+    auth.data.result !== null ? auth.data.result.access_token : '',
+  );
   return response.data;
 });
 
 export const createNewProduct = createAsyncThunk('product/createNewProduct', async (data: any, { getState }) => {
   const { auth } = getState() as { auth: IInitialStateAuth };
-  const response = await requestAuth('post', '/v1/products', auth.data.result.access_token, data);
+  const response = await requestAuth(
+    'post',
+    '/products',
+    auth.data.result !== null ? auth.data.result.access_token : '',
+    data,
+  );
   return response.data;
 });
 
 export const editProduct = createAsyncThunk('product/editProduct', async (data: any, { getState }) => {
   const { auth } = getState() as { auth: IInitialStateAuth };
-  const response = await requestAuth('put', `/v1/products/${data.id}`, auth.data.result.access_token, data);
+  const response = await requestAuth(
+    'put',
+    `/products/${data.id}`,
+    auth.data.result !== null ? auth.data.result.access_token : '',
+    data,
+  );
   return response.data;
 });
 
 export const deleteProduct = createAsyncThunk('product/deleteProduct', async (id: number, { getState }) => {
   const { auth } = getState() as { auth: IInitialStateAuth };
-  const response = await requestAuth('delete', `/v1/products/${id}`, auth.data.result.access_token);
+  const response = await requestAuth(
+    'delete',
+    `/products/${id}`,
+    auth.data.result !== null ? auth.data.result.access_token : '',
+  );
   return response.data;
 });
 
 export const productSlice = createSlice({
   name: 'product',
   initialState,
-  reducers: {},
+  reducers: {
+    saveDataProduct: (state, action: PayloadAction<any>) => {
+      state.saveData = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getDataProducts.pending, (state) => {
@@ -70,4 +93,5 @@ export const productSlice = createSlice({
   },
 });
 
+export const { saveDataProduct } = productSlice.actions;
 export default productSlice.reducer;
