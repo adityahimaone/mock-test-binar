@@ -48,6 +48,11 @@ Serve production build locally
   yarn preview
 ```
 
+### Jawaban No 4
+- Kekurangan api adalah error code antara gagal dari user salah, harusnya diawali dari 400 bukan 200.
+- Konsistensi data object antara response yang berhasil dan gagal tidak konsisten, di response gagal ada status di response gagal tidak ada.
+- Kena CORS
+
 ## Resources
 
 - [Vite](https://github.com/vitejs/vite)
